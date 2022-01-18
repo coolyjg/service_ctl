@@ -1,48 +1,52 @@
 use super::basic_engine::*;
 use super::peer_traits::*;
-use raft::{self, RaftState, Ready, Storage, StorageError};
+use super::peer_storage::*;
+use raft::{self, RaftState, Ready, Storage, StorageError, RawNode};
+use super::utils::*;
+use std::collections::HashMap;
+use madsim::time::Instant;
+use madsim::net::SocketAddr;
 
-pub struct PeerStorage<EK, ER>
-where  
-    EK: KvEngine,
-{
-    pub engine: Engines<EK, ER>,
-    peer_id: u64,
-    applied_index_term: u64,
-    last_term: u64,
 
-    pub tag: String,
 
-}
-
-impl<EK, ER> Storage for PeerStorage<EK, ER>
+pub struct Peer<EK, ER>
 where
     EK: KvEngine,
     ER: RaftEngine,
 {
-    fn initial_state(&self) -> Result<RaftState>{
-        todo!();
-    }
+    ///raft state machine of this peer
+    pub raft_group: RawNode<PeerStorage<EK, ER>>,
+    pub peer_heartbeats: HashMap<u64, Instant>,
 
-    fn entries(&self, low: u64, high: u64, max_size: impl Into<Option<u64>>) -> Result<Vec<Entry>>{
-        todo!();
-    }
+}
 
-    fn term(&self, idx: u64) -> Result<u64>{
-        todo!();
-    }
-
-    fn first_index(&self) -> Result<u64>{
-        todo!();
-    }
-
-    fn last_index(&self) -> Result<u64>{
-        todo!();
-    }
-
-    fn snapshot(&self, request_index: u64) -> Result<Snapshot>{
-        todo!();
+impl<EK, ER> Peer<EK, ER>
+where
+    EK: KvEngine,
+    ER: RaftEngine,
+{
+    pub fn new(
+        cfg: &Config,
+        engines: Engines<EK, ER>,
+    ) -> Result<Peer<EK, ER>>{
+        let logger = slog_global::get_global().new(slog::o!("invalid msg"=>""));
+        let tag = format!("Invalid msg");
+        let ps = PeerStorage::new(engines, tag);
+        let raft_group = RawNode::new(&cfg, ps, &logger);
+        let peer = Peer{
+            raft_group: raft_group,
+            peer_heartbreats: HashMap::new(),
+        };
+        Ok(peer)
     }
 }
+
+
+
+#[madsim::test]
+fn test(){
+
+}
+
 
 

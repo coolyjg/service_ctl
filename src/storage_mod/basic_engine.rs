@@ -76,13 +76,13 @@ impl Operation for BasicEngine{
 
 
 impl RaftEngine for BasicEngine{
-    fn get_entry(&self, raft_group_id: u64, index: u64)->Result<Option<Entry>>{
+    fn get_entry(&self, index: u64)->Result<Option<Entry>>{
         todo!();
     }
-    fn append(&mut self, raft_group_id: u64, entries: Vec<Entry>) -> Result<()>{
+    fn append(&mut self, entries: Vec<Entry>) -> Result<()>{
         todo!();
     }
-    fn cut_logs(&mut self, raft_group_id: u64, from: u64, to: u64){
+    fn cut_logs(&mut self, from: u64, to: u64){
         todo!();
     }
 }

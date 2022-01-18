@@ -6,9 +6,9 @@ pub trait KvEngine{
 }
 
 pub trait RaftEngine: Sync + Send + Clone + 'static{
-    fn get_entry(&self, raft_group_id: u64, index: u64)->Result<Option<Entry>>;
-    fn append(&mut self, raft_group_id: u64, entries: Vec<Entry>) -> Result<()>;
-    fn cut_logs(&mut self, raft_group_id: u64, from: u64, to: u64);
+    fn get_entry(&self, index: u64)->Result<Option<Entry>>;
+    fn append(&mut self, entries: Vec<Entry>) -> Result<()>;
+    fn cut_logs(&mut self, from: u64, to: u64);
     
 }
 

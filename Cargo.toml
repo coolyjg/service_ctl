@@ -6,13 +6,14 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rocksdb = "0.17"
-raft = {version = " 0.6.0", default-features = false, features = ["protobuf-codec"]}
-protobuf = {version = "2.8", features = ["bytes"]}
-serde = {version = "1.0", features = ["derive"]}
-gethostname = "0.2"
-uuid = {version = "0.8", features = ["serde", "v4"]}
 async-trait = "0.1"
-thiserror = "1.0"
+gethostname = "0.2"
 madsim = {version = "0.1.1", features = ["rpc", "macros", "logger"]}
+protobuf = {version = "2.8", features = ["bytes"]}
+raft = {version = " 0.6.0", default-features = false, features = ["protobuf-codec"]}
+rocksdb = "0.17"
+serde = {version = "1.0", features = ["derive"]}
+slog-global = {version="0.1", git = "https://github.com/breeswish/slog-global.git", rev = "d592f88e4dbba5eb439998463054f1a44fbf17b9"}
+thiserror = "1.0"
 tokio = {version = "1.0", features = ["full"]}
+uuid = {version = "0.8", features = ["serde", "v4"]}
