@@ -1,8 +1,10 @@
+
 use super::common::*;
 use raft::eraftpb::Entry;
-
+use crate::{ClusterMapVersion, ChangeLog, Error};
 pub trait KvEngine{
-
+    fn get(&self, from: ClusterMapVersion, to: Option<ClusterMapVersion>,) ->std::result::Result<(Vec<ChangeLog>, i64), Error>;
+    
 }
 
 pub trait RaftEngine: Sync + Send + Clone + 'static{

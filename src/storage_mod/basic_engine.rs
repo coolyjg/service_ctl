@@ -5,7 +5,7 @@ use rocksdb::{DBIterator, DB};
 use raft::eraftpb::Entry;
 use super::peer_traits::{KvEngine, Operation, RaftEngine};
 use super::common::*;
-
+use crate::cluster::*;
 
 #[derive(Clone, Debug)]
 pub struct BasicEngine{
@@ -49,6 +49,9 @@ impl BasicEngine{
 }
 
 impl KvEngine for BasicEngine{
+    fn get(&self, from: ClusterMapVersion, to: Option<ClusterMapVersion>,) ->std::result::Result<(Vec<ChangeLog>, i64), Error>{
+        todo!();
+    }
 
 }
 

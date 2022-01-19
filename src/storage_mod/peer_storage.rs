@@ -6,8 +6,11 @@ use raft::eraftpb::{Snapshot, Entry};
 pub struct PeerStorage<EK, ER>
 where  
     EK: KvEngine,
+    ER: RaftEngine,
 {
-    pub engine: Engines<EK, ER>,
+    pub REngine: ER,
+    pub KEngine: EK,
+
     //peer_id: u64,  //necessary?
     applied_index_term: u64,
     last_term: u64,
@@ -22,15 +25,17 @@ where
     ER: RaftEngine,
 {
     pub fn new(
-        engines: Engines<EK, ER>,
+        r_engine: ER,
+        k_engine: EK,
         //peer_id: u64,
         tag: String,
     ) -> Result<PeerStorage<EK, ER>>{
         let last_term = 5;
         let applied_index_term = 5; //Todo: get this two info. from engine
         Ok(PeerStorage{
-            engine: engines,
             //peer_id: peer_id,
+            REngine: r_engine,
+            KEngine: k_engine,
             applied_index_term: applied_index_term,
             last_term: last_term,
             tag: tag,

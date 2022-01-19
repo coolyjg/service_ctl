@@ -1,11 +1,12 @@
 use super::basic_engine::*;
 use super::peer_traits::*;
 use super::peer_storage::*;
-use raft::{self, RaftState, Ready, Storage, StorageError, RawNode};
+use super::common::*;
+use raft::{self, RaftState, Ready, Storage, StorageError, RawNode, Config};
 use super::utils::*;
 use std::collections::HashMap;
 use madsim::time::Instant;
-use madsim::net::SocketAddr;
+use madsim::net;
 
 
 
@@ -27,26 +28,22 @@ where
 {
     pub fn new(
         cfg: &Config,
-        engines: Engines<EK, ER>,
+        kengine: EK,
+        rengine: ER,
     ) -> Result<Peer<EK, ER>>{
         let logger = slog_global::get_global().new(slog::o!("invalid msg"=>""));
         let tag = format!("Invalid msg");
-        let ps = PeerStorage::new(engines, tag);
-        let raft_group = RawNode::new(&cfg, ps, &logger);
+        let ps = PeerStorage::new(rengine, kengine, tag)?;
+        //todo: add error handle function to `unwrap()`
+        let raft_group = RawNode::new(cfg, ps, &logger).unwrap();
         let peer = Peer{
             raft_group: raft_group,
-            peer_heartbreats: HashMap::new(),
+            peer_heartbeats: HashMap::new(),
         };
         Ok(peer)
     }
 }
 
-
-
-#[madsim::test]
-fn test(){
-
-}
 
 
 
