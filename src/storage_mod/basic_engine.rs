@@ -5,7 +5,7 @@ use rocksdb::{DBIterator, DB};
 use raft::eraftpb::Entry;
 use super::peer_traits::{KvEngine, Operation, RaftEngine};
 use super::common::*;
-use crate::cluster::*;
+use crate::{ClusterMapVersion, ChangeLog};
 
 #[derive(Clone, Debug)]
 pub struct BasicEngine{

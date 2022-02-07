@@ -1,6 +1,6 @@
-pub mod cluster;
-pub mod target;
-pub mod traits;
+mod cluster;
+mod target;
+mod traits;
 
 pub mod storage_mod;
 pub mod ctl;
