@@ -3,7 +3,7 @@ use super::common::*;
 use raft::eraftpb::Entry;
 use crate::{ClusterMapVersion, ChangeLog};
 
-pub trait KvEngine{
+pub trait KvEngine: Send + Sync{
     fn get(&self, from: ClusterMapVersion, to: Option<ClusterMapVersion>,) ->std::result::Result<(Vec<ChangeLog>, i64), Error>;
     
 }

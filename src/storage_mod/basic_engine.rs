@@ -71,7 +71,7 @@ impl Operation for BasicEngine{
     fn delete_range(&self, begin_key: &[u8], end_key: &[u8]) -> Result<()>{
         todo!("wrap rocksDB to support this range delection");
     }
-    ///todo: unwrap error handle
+    ///todo: error handle should be included
     fn put_msg<M: protobuf::Message>(&self, key: &[u8], m: &M) -> Result<()>{
         self.put(key, &m.write_to_bytes().unwrap())
     }
