@@ -3,8 +3,8 @@ use std::path::Path;
 use std::sync::Arc;
 use rocksdb::{DBIterator, DB};
 use raft::eraftpb::Entry;
-use super::peer_traits::{KvEngine, Operation, RaftEngine};
-use super::common::*;
+use super::peer_traits::{KvEngine, RaftEngine};
+use super::{common::*, utils::*};
 use crate::{ClusterMapVersion, ChangeLog};
 
 #[derive(Clone, Debug)]
@@ -49,19 +49,24 @@ impl BasicEngine{
 }
 
 impl KvEngine for BasicEngine{
-    fn get(&self, from: ClusterMapVersion, to: Option<ClusterMapVersion>,) ->std::result::Result<(Vec<ChangeLog>, i64), Error>{
+    fn get_range(&self, from: ClusterMapVersion, to: Option<ClusterMapVersion>,) ->std::result::Result<(Vec<ChangeLog>, i64), Error>{
         todo!();
     }
-
-}
-
-impl Operation for BasicEngine{
     fn put(&self, key: &[u8], value: &[u8]) -> Result<()>{
         match self.db.put(key, value){
             Ok(_) => Ok(()),
             Err(_) => Err(Error::Engine("put error".to_owned())),
         }
     }
+
+    fn get(&self, key: &[u8]) -> Option<Vec<u8>>{
+        match self.db.get(key){
+            Ok(Some(value)) => return Some(value),
+            Ok(None) => return None,
+            Err(e) => return None,
+        }
+    }
+
     fn delete(&self, key: &[u8]) -> Result<()>{
         match self.db.delete(key){
             Ok(_) => Ok(()),
@@ -75,6 +80,7 @@ impl Operation for BasicEngine{
     fn put_msg<M: protobuf::Message>(&self, key: &[u8], m: &M) -> Result<()>{
         self.put(key, &m.write_to_bytes().unwrap())
     }
+
 }
 
 
@@ -93,8 +99,17 @@ impl RaftEngine for BasicEngine{
 
 #[cfg(test)]
 mod tests{
-    fn test_operation(){
-        todo!("write basic operation tests");
+    use super::*;
+    use tempfile::Builder;
+    #[test]
+    fn test_put(){
+        let path = Builder::new().prefix("var").tempdir().unwrap();
+        let db = DB::open_default(path).unwrap();
+        let engine = BasicEngine::from_db(Arc::new(db));
+        let key = b"key";
+        let v = b"value";
+        engine.put(key, v);
+        assert_eq!(engine.get(key), Some(v));
     }
 }
 
