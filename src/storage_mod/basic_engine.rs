@@ -102,15 +102,21 @@ mod tests{
     use super::*;
     use tempfile::Builder;
     #[test]
-    fn test_put(){
+    fn test_basic_op(){
         let path = Builder::new().prefix("var").tempdir().unwrap();
         let db = DB::open_default(path).unwrap();
         let engine = BasicEngine::from_db(Arc::new(db));
-        let key = b"key";
-        let v = b"value";
-        engine.put(key, v).unwrap();
-        assert_eq!("value".to_string(), String::from_utf8(engine.get(b"key").unwrap()).unwrap());
-        
+        let (key1, v1) = (b"key1", b"value1");
+        let (key2, v2) = (b"key2", b"value2");
+        let (key3, v3) = (b"key3", b"value3");
+        engine.put(key1, v1).unwrap();
+        assert_eq!("value1".to_string(), String::from_utf8(engine.get(key1).unwrap()).unwrap());
+        engine.put(key2, v2).unwrap();
+        engine.put(key3, v3).unwrap();
+        assert_eq!("value2".to_string(), String::from_utf8(engine.get(key2).unwrap()).unwrap());
+        assert_eq!("value3".to_string(), String::from_utf8(engine.get(key3).unwrap()).unwrap());
+        engine.delete(key2).unwrap();
+        assert_eq!(None, engine.get(key2));
     }
 
     #[test]
