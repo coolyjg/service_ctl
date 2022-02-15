@@ -108,9 +108,19 @@ mod tests{
         let engine = BasicEngine::from_db(Arc::new(db));
         let key = b"key";
         let v = b"value";
-        engine.put(key, v);
-        assert_eq!(engine.get(key), Some(v));
+        engine.put(key, v).unwrap();
+        assert_eq!("value".to_string(), String::from_utf8(engine.get(b"key").unwrap()).unwrap());
+        
     }
+
+    #[test]
+    fn test_rocksdb(){
+        let path = Builder::new().prefix("var").tempdir().unwrap();
+        let db = DB::open_default(path).unwrap();
+        db.put(b"key", b"value").unwrap();
+        assert_eq!("value".to_string(), String::from_utf8(db.get(b"key").unwrap().unwrap()).unwrap());
+    }
+
 }
 
 
