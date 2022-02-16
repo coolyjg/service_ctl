@@ -21,4 +21,11 @@ impl<K: KvEngine, R: RaftEngine> Engines<K, R>{
 
 }
 
+pub struct RaftMessage{
+
+}
+
+pub struct RaftCmdRequest{
+
+}
 

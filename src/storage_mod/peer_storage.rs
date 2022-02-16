@@ -8,9 +8,7 @@ where
     EK: KvEngine,
     ER: RaftEngine,
 {
-    pub REngine: ER,
-    pub KEngine: EK,
-
+    pub engines: Engines<EK, ER>,
     //peer_id: u64,  //necessary?
     applied_index_term: u64,
     last_term: u64,
@@ -25,8 +23,7 @@ where
     ER: RaftEngine,
 {
     pub fn new(
-        r_engine: ER,
-        k_engine: EK,
+        engines: Engines<EK, ER>,
         //peer_id: u64,
         tag: String,
     ) -> Result<PeerStorage<EK, ER>>{
@@ -34,8 +31,7 @@ where
         let applied_index_term = 5; //Todo: get this two info. from engine
         Ok(PeerStorage{
             //peer_id: peer_id,
-            REngine: r_engine,
-            KEngine: k_engine,
+            engines: engines,
             applied_index_term: applied_index_term,
             last_term: last_term,
             tag: tag,
