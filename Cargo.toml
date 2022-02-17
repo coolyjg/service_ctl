@@ -8,9 +8,11 @@ edition = "2021"
 [dependencies]
 async-trait = "0.1"
 gethostname = "0.2"
+#kvproto = { git = "http://github.com/pingcap/kvproto.git"}
 madsim = {version = "0.1.1", features = ["rpc", "macros", "logger"]}
 protobuf = {version = "2.8", features = ["bytes"]}
-raft = {version = " 0.6.0", default-features = false, features = ["protobuf-codec"]}
+raft = {version = "0.6.0-alpha", default-features = false, features = ["protobuf-codec"]}
+raft-proto = {version = "0.6.0-alpha", default-features = false}
 #rocksdb = "0.17"
 rocksdb = {git = "https://github.com/yiyuanliu/rust-rocksdb", rev = "2ad9d83"}
 serde = {version = "1.0", features = ["derive"]}

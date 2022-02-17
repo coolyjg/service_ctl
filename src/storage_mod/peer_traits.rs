@@ -16,6 +16,7 @@ pub trait RaftEngine: Sync + Send + Clone + 'static{
     fn get_entry(&self, index: u64)->Result<Option<Entry>>;
     fn append(&mut self, entries: Vec<Entry>) -> Result<()>;
     fn cut_logs(&mut self, from: u64, to: u64);
+    fn fetch_entries_to(&self, begin: u64, end: u64, max_size: Option<usize>, to: &mut Vec<Entry>,) -> Result<usize>;
     
 }
 

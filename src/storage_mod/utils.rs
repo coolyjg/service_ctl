@@ -1,3 +1,5 @@
+use raft::StorageError;
+use std::error;
 use super::peer_traits::{KvEngine, RaftEngine};
 use super::common::*;
 
@@ -28,4 +30,12 @@ pub struct RaftMessage{
 pub struct RaftCmdRequest{
 
 }
+
+pub fn storage_error<E>(error: E)-> raft::Error
+where
+    E: Into<Box<dyn error::Error + Send + Sync>>,
+{
+    raft::Error::Store(StorageError::Other(error.into()))
+}
+
 

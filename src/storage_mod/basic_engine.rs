@@ -94,6 +94,9 @@ impl RaftEngine for BasicEngine{
     fn cut_logs(&mut self, from: u64, to: u64){
         todo!();
     }
+    fn fetch_entries_to(&self, begin: u64, end: u64, max_size: Option<usize>, to: &mut Vec<Entry>) -> Result<usize> {
+        todo!();
+    }
 }
 
 
